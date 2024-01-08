@@ -1,0 +1,6 @@
+
+- name: start ipsec service
+  command: service ipsec start
+  become: true
+  become_user: root
+

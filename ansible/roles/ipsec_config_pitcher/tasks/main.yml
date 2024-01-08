@@ -1,0 +1,23 @@
+---
+- name: gather information
+  setup:
+  register: server1_info
+
+
+- name: copy pitcher settings to json
+  local_action:
+    module: copy
+    content: "{{ server1_info.ansible_facts.ansible_ens5.ipv4 }}"
+    dest: "/tmp/my_vars/{{ inventory_hostname }}.json"
+    force: true
+
+# - name: read data from pitcher
+#   debug:
+#     msg: "{{ server1_info.ansible_facts.ansible_ens5.ipv4 }}"
+
+
+- name: generate PSK key
+  local_action:
+    module: shell
+    cmd: ./roles/ipsec_config_pitcher/files/generate_json_psk.sh > /tmp/my_vars/results/keys.psk
+  run_once: true

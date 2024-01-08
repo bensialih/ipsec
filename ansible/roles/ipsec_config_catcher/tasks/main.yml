@@ -1,0 +1,22 @@
+
+- name: gather information
+  setup:
+  register: server2_info
+
+- name: read data from catcher
+  debug:
+    msg: "{{ server2_info.ansible_facts.ansible_ens5.ipv4 }}"
+
+
+- name: copy catcher settings to json
+  local_action:
+    module: copy
+    content: "{{ server2_info.ansible_facts.ansible_ens5.ipv4 }}"
+    dest: "/tmp/my_vars/{{ inventory_hostname }}.json"
+    force: true
+
+
+- name: collate ip data
+  local_action:
+    module: shell
+    cmd: python ./roles/ipsec_config_catcher/files/collate.py

@@ -1,0 +1,36 @@
+---
+- name: install dependancies
+  yum:
+    name: "{{ packages }}"
+    state: present
+  become: true
+  become_user: root
+  vars:
+    packages:
+    - git
+    - make
+    - wget
+    - gcc
+    - gmp-devel
+    - bison
+    - flex
+
+
+- name: add google nameserver
+  blockinfile:
+    content: "nameserver 8.8.8.8"
+    path: "/etc/resolv.conf"
+  become: true
+  become_user: root
+
+- name: download openswan
+  git:
+    repo: "https://github.com/xelerance/Openswan.git"
+    dest: /home/ec2-user/Openswan
+
+- name: install openswan
+  shell: make programs && make install
+  args:
+    chdir: /home/ec2-user/Openswan
+  become: true
+  become_user: root

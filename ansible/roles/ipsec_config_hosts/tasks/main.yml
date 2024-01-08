@@ -1,0 +1,36 @@
+---
+
+# - hosts: hosts
+#   gather_facts: false
+#   become: true
+#   become_user: root
+
+  # vars_files:
+  # - /tmp/my_vars/results/{{ inventory_hostname }}.json
+  # # - /tmp/my_vars/results/keys.json
+
+
+- name: insert config file details
+  blockinfile:
+    marker: "# {mark} SETTINGS FOR {{ from_server.public_ip }}"
+    block: "{{ lookup('template', 'templates/ipsec.conf.j2') }}"
+    path: "/etc/ipsec.conf"
+
+
+- name: generate secret
+  shell: openssl rand -base64 128
+  register: psk
+  delegate_to: 127.0.0.1
+  run_once: true
+  become: false
+
+- name: insert secrets in file
+  blockinfile:
+    marker: "# {mark} PSK key for {{ from_server.public_ip }}"
+    block: "{{ lookup('template', 'templates/secrets_content.txt.j2') }}"
+    path: "/etc/ipsec.secrets"
+    create: true
+  remote_user: root
+
+  notify:
+  - start ipsec service
