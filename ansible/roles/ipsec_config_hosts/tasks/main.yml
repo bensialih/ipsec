@@ -32,6 +32,12 @@
     - pause ipsec
 
 
+- name: make sure service is stopped
+  command: service ipsec stop
+  remote_user: root
+  become: true
+
+
 # - name: run restart script
 #   script: ./roles/ipsec_config_hosts/files/restart.sh
 #   remote_user: root

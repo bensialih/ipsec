@@ -46,18 +46,20 @@
     - /tmp/my_vars/results/{{ inventory_hostname }}.json
 
 
-- name: restart services
-  hosts: hosts
-  remote_user: root
-  become: true
-  roles:
-    - restarts
+# - name: restart services
+#   hosts: hosts
+#   remote_user: root
+#   become: true
+#   roles:
+#     - restarts
 
-  pre_tasks:
-    - name: stop service
-      shell: service ipsec stop && sleep 15
-      become: true
-      become_user: root
+#   pre_tasks:
+#     - name: stop service
+#       shell: service ipsec stop && sleep 15
+#       become: true
+#       become_user: root
+
+
 
 
   # vars_files:

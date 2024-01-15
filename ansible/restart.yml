@@ -1,0 +1,22 @@
+- name: setup hosts config
+  hosts: pitcher
+  remote_user: root
+  become: true
+
+  roles:
+    - restarts
+
+
+- name: setup hosts config
+  hosts: catcher
+  remote_user: root
+  become: true
+
+  roles:
+    - restarts
+
+  pre_tasks:
+    - name: pause service
+      shell: sleep 15
+      become: true
+      become_user: root
