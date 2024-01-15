@@ -17,13 +17,33 @@ From intial deployment complete to creating a tunnel between the 2 servers.
 - required: `ansible/inventory.ini`
 
 ```
-[hosts]
-PUBLIC_IP1__PITCHER
-PUBLIC_IP2__CATCHER
+[pitcher]
+ip_here
+
+[catcher]
+ip_here
+
+[hosts:children]
+pitcher
+catcher
+
+
+[pitcher:vars]
+ansible_ssh_private_key_file=~/.ssh/location_of_ssh_key
+ansible_ssh_user=ec2-user
+ansible_host_key_checking=False
+
+[catcher:vars]
+ansible_ssh_private_key_file=~/.ssh/location_of_ssh_key
+ansible_ssh_user=ec2-user
+ansible_host_key_checking=False
+
 
 [hosts:vars]
-ansible_ssh_private_key_file=LOCATION_OF_KEY
+ansible_ssh_private_key_file=~/.ssh/location_of_ssh_key
 ansible_ssh_user=ec2-user
+ansible_host_key_checking=False
+
 
 ```
 
@@ -42,4 +62,7 @@ check servers are reachable
 run ansible playbook
 - `ansible-playbook ./ansible/site.yml  -i ./ansible/inventory.ini`
 
+
+run a restart on the IPsec service
+- `ansible-playbook ./ansible/restart.yml -v -i ./ansible/inventory.ini`
 
