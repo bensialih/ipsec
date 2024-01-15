@@ -1,0 +1,10 @@
+---
+
+- name: restart server services
+  script: ./roles/ipsec_config_hosts/files/restart.sh
+
+
+
+
+
+

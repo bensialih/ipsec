@@ -27,9 +27,15 @@
   git:
     repo: "https://github.com/xelerance/Openswan.git"
     dest: /home/ec2-user/Openswan
+    accept_newhostkey: true
 
 - name: install openswan
-  shell: make programs && make install
+  command: make programs
+  args:
+    chdir: /home/ec2-user/Openswan
+
+- name: make openswan
+  command: make install
   args:
     chdir: /home/ec2-user/Openswan
   become: true

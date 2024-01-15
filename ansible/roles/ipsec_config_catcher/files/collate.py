@@ -52,22 +52,28 @@ for file in FILES:
 		data.append(Entry(**content, public=public))
 
 
-def create_config(pitcher_data, catcher_data, position="first"):
+def create_config(pitcher_data, catcher_data, position="east", public=None):
 	return ServerConfig(
 		name = position,
 		from_server = Server(
 			private_ip = pitcher_data.address,
-			public_ip = pitcher_data.public,
+			public_ip = public,
 			subnet = f'{pitcher_data.network}/{pitcher_data.prefix}'
 		),
 		to_server = Server(
 			private_ip = catcher_data.address,
-			public_ip = catcher_data.public,
+			public_ip = public,
 			subnet = f'{catcher_data.network}/{catcher_data.prefix}'
 		)
 	)
 
-dataset = [create_config(data[1], data[0]), create_config(data[0], data[1], position="second")]
+dataset = [
+	create_config(data[1], data[0], position="west", public=data[0].public),
+	create_config(data[1], data[0], position="east", public=data[1].public)
+
+	# create_config(data[1], data[0],public=data[0].public),
+	# create_config(data[0], data[1], position="west", public=data[1].public)
+]
 
 
 for file in dataset:

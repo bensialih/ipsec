@@ -9,12 +9,7 @@ conn server-config
 		connaddrfamily=ipv4
 		authby=secret
 
-		{% if name == "first" %}
-		leftid=@West
-		rightid=@East
-		{% else %}
 		leftid=@East
 		rightid=@West
-		{% endif %}
 		leftsourceip={{ to_server.private_ip }}
 		rightsourceip={{ from_server.private_ip }}

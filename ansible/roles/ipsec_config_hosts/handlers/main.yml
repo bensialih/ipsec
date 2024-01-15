@@ -1,6 +1,19 @@
 
-- name: start ipsec service
-  command: service ipsec start
+- name: pause ipsec
+  pause:
+    seconds: 3
+
+- name: stop ipsec service
+  shell: service ipsec stop
   become: true
   become_user: root
 
+- name: start ipsec service
+  shell: service ipsec start
+  become: true
+  become_user: root
+
+- name: status of ipsec
+  shell: service ipsec status
+  become: true
+  become_user: root

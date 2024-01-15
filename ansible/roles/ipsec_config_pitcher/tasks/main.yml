@@ -11,11 +11,6 @@
     dest: "/tmp/my_vars/{{ inventory_hostname }}.json"
     force: true
 
-# - name: read data from pitcher
-#   debug:
-#     msg: "{{ server1_info.ansible_facts.ansible_ens5.ipv4 }}"
-
-
 - name: generate PSK key
   local_action:
     module: shell

@@ -1,18 +1,8 @@
 ---
 
-# - hosts: hosts
-#   gather_facts: false
-#   become: true
-#   become_user: root
-
-  # vars_files:
-  # - /tmp/my_vars/results/{{ inventory_hostname }}.json
-  # # - /tmp/my_vars/results/keys.json
-
-
 - name: insert config file details
   blockinfile:
-    marker: "# {mark} SETTINGS FOR {{ from_server.public_ip }}"
+    marker: "# {mark} SETTINGS FOR {{ inventory_hostname }}"
     block: "{{ lookup('template', 'templates/ipsec.conf.j2') }}"
     path: "/etc/ipsec.conf"
 
@@ -24,13 +14,32 @@
   run_once: true
   become: false
 
+- name: enable ipsec
+  command: systemctl enable ipsec
+  remote_user: root
+  become: true
+
+
 - name: insert secrets in file
   blockinfile:
-    marker: "# {mark} PSK key for {{ from_server.public_ip }}"
+    marker: "# {mark} PSK key for {{ inventory_hostname }}"
     block: "{{ lookup('template', 'templates/secrets_content.txt.j2') }}"
     path: "/etc/ipsec.secrets"
     create: true
+    # force: true
   remote_user: root
-
   notify:
-  - start ipsec service
+    - pause ipsec
+
+
+# - name: run restart script
+#   script: ./roles/ipsec_config_hosts/files/restart.sh
+#   remote_user: root
+#   become: true
+#   notify:
+#   - pause ipsec
+
+  # - stop ipsec service
+  # - pause ipsec
+  # - start ipsec service
+  # - status of ipsec

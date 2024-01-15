@@ -9,7 +9,7 @@
   - name: create tmp folders
     local_action:
       module: shell
-      cmd: mkdir -p /tmp/my_vars/results
+      cmd: rm -r /tmp/my_vars && mkdir -p /tmp/my_vars/results 
 
 - name: setup pitcher
   hosts: pitcher
@@ -34,6 +34,7 @@
     delegate_to: 127.0.0.1
     ignore_errors: true
 
+
 - name: setup hosts config
   hosts: hosts
   remote_user: root
@@ -42,4 +43,45 @@
     - ipsec_config_hosts
 
   vars_files:
-  - /tmp/my_vars/results/{{ inventory_hostname }}.json
+    - /tmp/my_vars/results/{{ inventory_hostname }}.json
+
+
+- name: restart services
+  hosts: hosts
+  remote_user: root
+  become: true
+  roles:
+    - restarts
+
+  pre_tasks:
+    - name: stop service
+      shell: service ipsec stop && sleep 15
+      become: true
+      become_user: root
+
+
+  # vars_files:
+  #   - /tmp/my_vars/results/{{ inventory_hostname }}.json
+
+# - name: run restart script
+#   hosts: hosts
+#   remote_user: root
+#   become: true
+#   roles:
+
+#   notify:
+#     - pause ipsec
+
+  # roles:
+  # - ipsec_config_hosts
+  # notify:
+  # - pause ipsec
+
+
+# - name: setup hosts config
+#   hosts: catcher
+#   remote_user: root
+#   become: true
+
+#   vars_files:
+#   - /tmp/my_vars/results/{{ inventory_hostname }}.json
