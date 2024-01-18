@@ -17,6 +17,6 @@
 
   pre_tasks:
     - name: pause service
-      shell: sleep 15
+      shell: sleep 10
       become: true
       become_user: root

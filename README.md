@@ -66,3 +66,5 @@ run ansible playbook
 run a restart on the IPsec service
 - `ansible-playbook ./ansible/restart.yml -v -i ./ansible/inventory.ini`
 
+
+- Installing ipsec is done with `site.yml` but if you just need a restart, then use `restart.yml`
