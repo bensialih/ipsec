@@ -1,0 +1,15 @@
+
+conn server-config
+		# Left security gateway, subnet behind it, nexthop toward right.
+		left={{ to_server.private_ip }}
+		leftsubnet={{ to_server.subnet }}
+		right={{ from_server.private_ip }}
+		rightsubnet={{ from_server.subnet }}
+		auto=start
+		connaddrfamily=ipv4
+		authby=secret
+
+		leftid=@East
+		rightid=@West
+		leftsourceip={{ to_server.private_ip }}
+		rightsourceip={{ from_server.private_ip }}

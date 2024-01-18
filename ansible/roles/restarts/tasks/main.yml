@@ -1,0 +1,7 @@
+---
+
+- name: stop server services
+  command: sudo systemctl stop ipsec
+
+- name: start server services
+  command: sudo systemctl start ipsec

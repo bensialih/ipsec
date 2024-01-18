@@ -1,0 +1,69 @@
+---
+- name: setup and configure ipsec
+  hosts: hosts
+  remote_user: root
+  roles:
+    - ipsec_setup
+
+  pre_tasks:
+  - name: create tmp folders
+    local_action:
+      module: shell
+      cmd: rm -r /tmp/my_vars && mkdir -p /tmp/my_vars/results 
+
+- name: setup pitcher
+  hosts: pitcher
+
+  roles:
+    - ipsec_config_pitcher
+
+  pre_tasks:
+  - name: delete old files
+    shell: "rm /tmp/my_vars/{{ inventory_hostname }}.json || true"
+    delegate_to: 127.0.0.1
+    ignore_errors: true
+
+- name: setup cather
+  hosts: catcher
+  roles:
+    - ipsec_config_catcher
+
+  pre_tasks:
+  - name: delete old files
+    shell: "rm /tmp/my_vars/{{ inventory_hostname }}.json || true"
+    delegate_to: 127.0.0.1
+    ignore_errors: true
+
+
+- name: setup hosts config
+  hosts: hosts
+  remote_user: root
+  become: true
+  roles:
+    - ipsec_config_hosts
+
+  vars_files:
+    - /tmp/my_vars/results/{{ inventory_hostname }}.json
+
+
+- name: setup hosts config
+  hosts: pitcher
+  remote_user: root
+  become: true
+
+  roles:
+    - restarts
+
+- name: setup hosts config
+  hosts: catcher
+  remote_user: root
+  become: true
+
+  roles:
+    - restarts
+
+  pre_tasks:
+    - name: pause service
+      shell: sleep 10
+      become: true
+      become_user: root

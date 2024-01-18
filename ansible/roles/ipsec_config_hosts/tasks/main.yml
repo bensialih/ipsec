@@ -1,0 +1,38 @@
+---
+
+- name: insert config file details
+  blockinfile:
+    marker: "# {mark} SETTINGS FOR {{ inventory_hostname }}"
+    block: "{{ lookup('template', 'templates/ipsec.conf.j2') }}"
+    path: "/etc/ipsec.conf"
+
+
+- name: generate secret
+  shell: openssl rand -base64 128
+  register: psk
+  delegate_to: 127.0.0.1
+  run_once: true
+  become: false
+
+- name: enable ipsec
+  command: systemctl enable ipsec
+  remote_user: root
+  become: true
+
+
+- name: insert secrets in file
+  blockinfile:
+    marker: "# {mark} PSK key for {{ inventory_hostname }}"
+    block: "{{ lookup('template', 'templates/secrets_content.txt.j2') }}"
+    path: "/etc/ipsec.secrets"
+    create: true
+    # force: true
+  remote_user: root
+  notify:
+    - pause ipsec
+
+
+- name: make sure service is stopped
+  command: service ipsec stop
+  remote_user: root
+  become: true

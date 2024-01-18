@@ -1,0 +1,67 @@
+- name: install dependancies
+  yum:
+    name: "{{ packages }}"
+    state: present
+  become: true
+  become_user: root
+  vars:
+    packages:
+    - git
+    - nano
+    - audit-libs-devel
+    - bison
+    - curl-devel
+    - flex
+    - gcc
+    - ldns-devel
+    - libcap-ng-devel
+    - libevent-devel
+    - libseccomp-devel
+    - libselinux-devel
+    - make
+    - nspr-devel
+    - nss-devel
+    - pam-devel
+    - pkgconfig
+    - systemd-devel
+    - unbound-devel
+    - xmlto
+    - nss-tools
+
+- name: add google nameserver
+  blockinfile:
+    content: "nameserver 8.8.8.8"
+    path: "/etc/resolv.conf"
+  become: true
+  become_user: root
+
+- name: download libreswan
+  git:
+    repo: "https://github.com/libreswan/libreswan.git"
+    dest: /home/ec2-user/libreswan
+    accept_newhostkey: true
+    version: fe0cb4e6b770e6111efb62c46e384592a662ab12
+
+
+- name: build libreswan
+  command: gmake
+  args:
+    chdir: /home/ec2-user/libreswan
+  
+
+- name: install libreswan
+  command: gmake install
+  args:
+    chdir: /home/ec2-user/libreswan
+
+
+- name: enable ipsec service
+  service:
+    name: ipsec
+    enabled: yes
+    state: started
+
+
+- name: init nss
+  command: ipsec initnss --nssdir /var/lib/ipsec/nss
+

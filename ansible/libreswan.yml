@@ -1,0 +1,8 @@
+---
+- name: setup and configure ipsec
+  hosts: hosts
+  remote_user: root
+  become: true
+  roles:
+    - libre
+
