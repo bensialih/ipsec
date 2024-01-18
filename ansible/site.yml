@@ -46,44 +46,24 @@
     - /tmp/my_vars/results/{{ inventory_hostname }}.json
 
 
-# - name: restart services
-#   hosts: hosts
-#   remote_user: root
-#   become: true
-#   roles:
-#     - restarts
+- name: setup hosts config
+  hosts: pitcher
+  remote_user: root
+  become: true
 
-#   pre_tasks:
-#     - name: stop service
-#       shell: service ipsec stop && sleep 15
-#       become: true
-#       become_user: root
+  roles:
+    - restarts
 
+- name: setup hosts config
+  hosts: catcher
+  remote_user: root
+  become: true
 
+  roles:
+    - restarts
 
-
-  # vars_files:
-  #   - /tmp/my_vars/results/{{ inventory_hostname }}.json
-
-# - name: run restart script
-#   hosts: hosts
-#   remote_user: root
-#   become: true
-#   roles:
-
-#   notify:
-#     - pause ipsec
-
-  # roles:
-  # - ipsec_config_hosts
-  # notify:
-  # - pause ipsec
-
-
-# - name: setup hosts config
-#   hosts: catcher
-#   remote_user: root
-#   become: true
-
-#   vars_files:
-#   - /tmp/my_vars/results/{{ inventory_hostname }}.json
+  pre_tasks:
+    - name: pause service
+      shell: sleep 15
+      become: true
+      become_user: root

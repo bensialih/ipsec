@@ -2,11 +2,11 @@
 
 - name: stop server services
   # script: ./roles/ipsec_config_hosts/files/restart.sh
-  command: sudo /etc/rc.d/init.d/ipsec stop && sleep 10 && sudo /etc/rc.d/init.d/ipsec start
+  command: sudo systemctl stop ipsec
 
 - name: start server services
   # script: ./roles/ipsec_config_hosts/files/restart.sh
-  command: sudo /etc/rc.d/init.d/ipsec start
+  command: sudo systemctl start ipsec
 
 # - name: restart ipsec service
 #   service:
