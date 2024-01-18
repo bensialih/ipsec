@@ -1,22 +1,7 @@
 ---
 
 - name: stop server services
-  # script: ./roles/ipsec_config_hosts/files/restart.sh
   command: sudo systemctl stop ipsec
 
 - name: start server services
-  # script: ./roles/ipsec_config_hosts/files/restart.sh
   command: sudo systemctl start ipsec
-
-# - name: restart ipsec service
-#   service:
-#     name: ipsec
-#     state: restarted
-
-# - name: restart server services
-#   command: service ipsec start
-
-# - name: start service
-#   command: service ipsec status || true
-
-

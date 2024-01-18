@@ -1,6 +1,3 @@
-
-
-
 sudo yum update -y
 sudo yum install git make wget gcc gmp-devel bison flex -y
 
