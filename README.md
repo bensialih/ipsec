@@ -14,7 +14,7 @@ From intial deployment complete to creating a tunnel between the 2 servers.
 
 
 ## Ansible requirements
-- required: `ansible/inventory.ini`
+- required: `inventory.ini`
 
 ```
 [pitcher]
@@ -57,14 +57,14 @@ Ansible allows us to gather data from our subject servers and deploy our ipsec t
 ## running Ansible
 
 check servers are reachable
-- `ansible hosts -m ping -i ./ansible/inventory.ini`
+- `ansible hosts -m ping -i ./inventory.ini`
 
 run ansible playbook
-- `ansible-playbook ./ansible/site.yml  -i ./ansible/inventory.ini`
+- `ansible-playbook main.yml  -i inventory.ini`
 
 
 run a restart on the IPsec service
-- `ansible-playbook ./ansible/restart.yml -v -i ./ansible/inventory.ini`
+- `ansible-playbook restart.yml -v -i inventory.ini`
 
 
-- Installing ipsec is done with `site.yml` but if you just need a restart, then use `restart.yml`
+- Installing ipsec is done with `main.yml` but if you just need a restart, then use `restart.yml`
